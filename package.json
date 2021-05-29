@@ -1,10 +1,11 @@
 {
-  "name": "DVideo",
-  "version": "0.1.0",
-  "description": "Decentralized platform for video publishing",
-  "author": "Dapp University",
+  "name": "celebrity-collectible-maker",
+  "version": "1.0.0",
+  "description": "Decentralized platform for celebrity collectible making",
+  "author": "darkkong",
   "homepage": ".",
   "dependencies": {
+    "@openzeppelin/contracts": "^2.3.0",
     "@truffle/hdwallet-provider": "^1.1.0",
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.7.0",
@@ -45,6 +46,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "gh-pages": "^2.2.0"
+    "gh-pages": "^2.2.0",
+    "prettier": "^2.3.0",
+    "prettier-plugin-solidity": "^1.0.0-beta.11"
   }
 }
