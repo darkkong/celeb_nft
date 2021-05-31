@@ -31,7 +31,7 @@ contract("CelebCollectible", (accounts) => {
 
   describe("minting", async () => {
     it("creates a new token", async () => {
-      const fileType = 1;
+      const fileType = 0;
       const result = await celebCollectible.mint("this is token uri", fileType);
 
       const totalSupply = await celebCollectible.totalSupply();

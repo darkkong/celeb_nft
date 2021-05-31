@@ -1,78 +1,173 @@
-import React, { Component } from 'react';
-import DVideo from '../abis/DVideo.json'
-import Navbar from './Navbar'
-import Main from './Main'
-import Web3 from 'web3';
-import './App.css';
+import React, { Component } from "react";
+import CelebCollectible from "../abis/CelebCollectible.json";
+import Navbar from "./Navbar";
+import Main from "./Main";
+import Web3 from "web3";
+import "./App.css";
+
+require("dotenv").config();
 
 //Declare IPFS
-const ipfsClient = require('ipfs-http-client')
-const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' }) // leaving out the arguments will default to these values
+const ipfsClient = require("ipfs-http-client");
+const ipfs = ipfsClient({
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+}); // leaving out the arguments will default to these values
+
+const pinataSDK = require("@pinata/sdk");
+const pinata = pinataSDK(
+  process.env.REACT_APP_PINATA_API_KEY,
+  process.env.REACT_APP_PINATA_SECRET_API_KEY
+);
 
 class App extends Component {
-
   async componentWillMount() {
-    await this.loadWeb3()
-    await this.loadBlockchainData()
+    await this.loadWeb3();
+    await this.loadBlockchainData();
+
+    this.setState({ loading: false });
   }
 
   async loadWeb3() {
     if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum)
-      await window.ethereum.enable()
-    }
-    else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider)
-    }
-    else {
-      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+      window.web3 = new Web3(window.ethereum);
+    } else {
+      window.alert(
+        "Non-Ethereum browser detected. You should consider trying MetaMask!"
+      );
     }
   }
 
   async loadBlockchainData() {
-    const web3 = window.web3
-    //Load accounts
-    //Add first account the the state
+    const web3 = window.web3;
 
-    //Get network ID
-    //Get network data
-    //Check if net data exists, then
-      //Assign dvideo contract to a variable
-      //Add dvideo to the state
+    const accounts = await web3.eth.getAccounts();
+    this.setState({ account: accounts[0] });
 
-      //Check videoAmounts
-      //Add videAmounts to the state
+    const networkId = await web3.eth.net.getId();
+    const networkData = CelebCollectible.networks[networkId];
 
-      //Iterate throught videos and add them to the state (by newest)
+    if (networkData) {
+      const celebCollectible = new web3.eth.Contract(
+        CelebCollectible.abi,
+        networkData.address
+      );
+      const totalSupply = await celebCollectible.methods.totalSupply().call();
+      this.setState({ celebCollectible, totalSupply, loading: false });
 
-
-      //Set latest video and it's title to view as default 
-      //Set loading state to false
-
-      //If network data doesn't exisits, log error
+      // Load Collectibles
+      for (let i = 1; i <= totalSupply; i++) {
+        const tokenURI = await celebCollectible.methods.tokenURI(i).call();
+        const collectible = await this.fetchJSONData(tokenURI);
+        this.setState({
+          collectibles: [...this.state.collectibles, collectible],
+        });
+      }
+    } else {
+      window.alert(
+        "CelebCollectible contract not deployed to detected network."
+      );
+    }
   }
 
-  //Get video
-  captureFile = event => {
-
+  async fetchJSONData(uri) {
+    const api_call = await fetch(uri);
+    const data = await api_call.json();
+    return data;
   }
 
-  //Upload video
-  uploadVideo = title => {
+  //Get file
+  captureFile = (event) => {
+    event.preventDefault();
 
-  }
+    const file = event.target.files[0];
+    if (file.type.startsWith("image")) {
+      this.setState({ fileType: "image", fileTypeNumber: 0 });
+    } else if (file.type.startsWith("video")) {
+      this.setState({ fileType: "video", fileTypeNumber: 1 });
+    } else if (file.type.startsWith("audio")) {
+      this.setState({ fileType: "audio", fileTypeNumber: 2 });
+    } else {
+      window.alert("You can upload image, video or audio only!");
+    }
+
+    const reader = new window.FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onloadend = () => {
+      this.setState({ buffer: Buffer(reader.result) });
+      console.log("buffer", this.state.buffer);
+    };
+  };
+
+  //Get Value from Child
+  setNameAndDesc = (name, description) => {
+    this.setState({ name, description });
+
+    this.uploadFile();
+  };
+
+  //Upload File
+  uploadFile = async () => {
+    this.setState({ loading: true });
+    console.log("Submitting file to IPFS...");
+
+    //Add file to the IPFS
+    const ipfsResult = await ipfs.add(this.state.buffer);
+    console.log("IPFS result", ipfsResult);
+    this.setState({ fileHash: ipfsResult[0].hash });
+
+    const body = {
+      name: this.state.name,
+      description: this.state.description,
+      image_url: "https://ipfs.infura.io/ipfs/" + this.state.fileHash,
+      attributes: [
+        {
+          file_type: this.state.fileType,
+        },
+      ],
+    };
+
+    //Add JSON Metadata to the IPFS via Pinata
+    const pinataResult = await pinata.pinJSONToIPFS(body);
+    //handle results here
+    console.log("Pinata result", pinataResult);
+    this.setState({
+      tokenURI: "https://gateway.pinata.cloud/ipfs/" + pinataResult.IpfsHash,
+    });
+
+    this.mintToken(this.state.tokenURI, this.state.fileTypeNumber);
+  };
+
+  //Mint Token
+  mintToken = async (tokenURI, fileTypeNumber) => {
+    await this.state.celebCollectible.methods
+      .mint(tokenURI, fileTypeNumber)
+      .send({ from: this.state.account })
+      .on("transactionHash", (hash) => {
+        console.log(tokenURI);
+      });
+    const collectible = await this.fetchJSONData(tokenURI);
+    this.setState({
+      collectibles: [...this.state.collectibles, collectible],
+      loading: false,
+    });
+  };
 
   //Change Video
-  changeVideo = (hash, title) => {
-
-  }
+  changeVideo = (hash, title) => {};
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      loading: false
-      //set states
-    }
+      account: "",
+      celebCollectible: null,
+      collectibles: [],
+      loading: true,
+      name: "",
+      description: "",
+    };
 
     //Bind functions
   }
@@ -80,15 +175,18 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar 
-          //Account
-        />
-        { this.state.loading
-          ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
-          : <Main
-              //states&functions
-            />
-        }
+        <Navbar account={this.state.account} />
+        {this.state.loading ? (
+          <div id="loader" className="text-center mt-5">
+            <p>Loading...</p>
+          </div>
+        ) : (
+          <Main
+            captureFile={this.captureFile}
+            setNameAndDesc={this.setNameAndDesc}
+            collectibles={this.state.collectibles}
+          />
+        )}
       </div>
     );
   }

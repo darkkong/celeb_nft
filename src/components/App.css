@@ -1,1 +1,7 @@
 /* Styles go here */
+
+.token {
+  height: 15rem;
+  width: 15rem;
+  display: inline-block;
+}
