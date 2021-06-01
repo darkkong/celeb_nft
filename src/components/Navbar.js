@@ -5,7 +5,7 @@ import celebrity from "../celebrity.png";
 class Navbar extends Component {
   render() {
     return (
-      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow text-monospace">
+      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
         <div className="navbar-brand col-sm-3 col-md-2 mr-0">
           <img
             src={celebrity}
@@ -14,7 +14,7 @@ class Navbar extends Component {
             className="d-inline-block align-top"
             alt=""
           />
-          &nbsp;Celebrity NFT Maker
+          &nbsp;Celebrity Collectible Minter
         </div>
         <ul className="navbar-nav px-3">
           <li>
@@ -22,7 +22,7 @@ class Navbar extends Component {
               <a
                 target="_blank"
                 alt=""
-                className="text-white"
+                className="text-white text-monospace"
                 rel="noopener noreferrer"
                 href={
                   "https://rinkeby.etherscan.io/address/" + this.props.account

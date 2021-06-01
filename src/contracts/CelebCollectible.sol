@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721Full.sol";
 
 contract CelebCollectible is ERC721Full {
-  enum TokenType { IMAGE, VIDEO, AUDIO }
+  enum TokenType { IMAGE, VIDEO, AUDIO, ETC }
 
   mapping(uint256 => TokenType) public tokenIdToTokenType;
 

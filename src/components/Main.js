@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import audio from "../music-note.png";
+import etc from "../document.png";
 
 class Main extends Component {
   render() {
@@ -8,10 +9,82 @@ class Main extends Component {
         <br></br>
         &nbsp;
         <br></br>
-        <div className="row">
-          <main role="main" className="col-lg-12 d-flex text-center">
-            <div className="content mr-auto ml-auto">
-              <h1>Create new item</h1>
+        <div className="row h-50">
+          <div className="col-md-6">
+            <div
+              className="embed-responsive embed-responsive-16by9 rounded border border-secondary"
+              style={{
+                height: "600px",
+              }}
+            >
+              <iframe
+                className="embed-responsive-item"
+                src={this.props.currentCollectible.image_url}
+                c
+                allowFullScreen
+              ></iframe>
+              {/* {(() => {
+                if (
+                  this.props.currentCollectible.attributes[0].file_type ===
+                  "image"
+                ) {
+                  return (
+                    <img
+                      className="img-fluid mx-auto d-block"
+                      src={this.props.currentCollectible.image_url}
+                      alt=""
+                    />
+                  );
+                } else if (
+                  this.props.currentCollectible.attributes[0].file_type ===
+                  "video"
+                ) {
+                  return (
+                    <video
+                      src={this.props.currentCollectible.image_url}
+                      controls
+                    ></video>
+                  );
+                } else if (
+                  this.props.currentCollectible.attributes[0].file_type ===
+                  "audio"
+                ) {
+                  return (
+                    <audio
+                      src={this.props.currentCollectible.image_url}
+                      controls
+                    ></audio>
+                  );
+                } else {
+                  return (
+                    <a href={this.props.currentCollectible.image_url}>
+                      <img src={etc} alt="" />
+                    </a>
+                  );
+                }
+              })()} */}
+            </div>
+          </div>
+          <div
+            className="col-md-2 text-break overflow-auto rounded border border-secondary"
+            style={{ maxHeight: "768px", minWidth: "175px" }}
+          >
+            <h3>
+              <b>{this.props.currentCollectible.name}</b>
+            </h3>
+            <br />
+            <h6>Owned by {this.props.currentOwner}</h6>
+            <br />
+            <br />
+            <p>{this.props.currentCollectible.description}</p>
+          </div>
+          <div className="col-md-2"></div>
+          <div
+            className="col-md-2 overflow-auto text-center"
+            style={{ maxHeight: "768px", minWidth: "175px" }}
+          >
+            <div className="content">
+              <h3>Create new item</h3>
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
@@ -51,7 +124,7 @@ class Main extends Component {
                 />
               </form>
             </div>
-          </main>
+          </div>
         </div>
         <br></br>
         &nbsp;
@@ -63,17 +136,11 @@ class Main extends Component {
         <div className="row">
           {this.props.collectibles.map((collectible, key) => {
             return (
-              <div className="col-md-3">
+              <div className="col-md-3" key={key}>
                 <div
                   className="card mb-5 bg-light mx-auto"
                   style={{ width: "18rem", height: "24rem" }}
-                  key={key}
-                  onClick={() =>
-                    this.props.changeVideo(
-                      collectible.image_url,
-                      collectible.name
-                    )
-                  }
+                  onClick={() => this.props.changeToken(collectible)}
                 >
                   {(() => {
                     if (collectible.attributes[0].file_type === "image") {
@@ -100,6 +167,13 @@ class Main extends Component {
                         <img
                           className="card-img-top mx-auto token rounded border border-secondary mt-4"
                           src={audio}
+                        />
+                      );
+                    } else {
+                      return (
+                        <img
+                          className="card-img-top mx-auto token rounded border border-secondary mt-4"
+                          src={etc}
                         />
                       );
                     }

@@ -55,16 +55,22 @@ class App extends Component {
         networkData.address
       );
       const totalSupply = await celebCollectible.methods.totalSupply().call();
-      this.setState({ celebCollectible, totalSupply, loading: false });
+      this.setState({ celebCollectible, totalSupply });
 
       // Load Collectibles
-      for (let i = 1; i <= totalSupply; i++) {
+      for (let i = totalSupply; i >= 1; i--) {
         const tokenURI = await celebCollectible.methods.tokenURI(i).call();
         const collectible = await this.fetchJSONData(tokenURI);
+        if (i === totalSupply) {
+          const currentOwner = await celebCollectible.methods.ownerOf(i).call();
+          this.setState({ currentCollectible: collectible, currentOwner });
+        }
         this.setState({
           collectibles: [...this.state.collectibles, collectible],
         });
       }
+
+      this.setState({ loading: false });
     } else {
       window.alert(
         "CelebCollectible contract not deployed to detected network."
@@ -90,7 +96,7 @@ class App extends Component {
     } else if (file.type.startsWith("audio")) {
       this.setState({ fileType: "audio", fileTypeNumber: 2 });
     } else {
-      window.alert("You can upload image, video or audio only!");
+      this.setState({ fileType: "etc", fileTypeNumber: 3 });
     }
 
     const reader = new window.FileReader();
@@ -141,22 +147,24 @@ class App extends Component {
   };
 
   //Mint Token
-  mintToken = async (tokenURI, fileTypeNumber) => {
+  mintToken = async () => {
     await this.state.celebCollectible.methods
-      .mint(tokenURI, fileTypeNumber)
+      .mint(this.state.tokenURI, this.state.fileTypeNumber)
       .send({ from: this.state.account })
-      .on("transactionHash", (hash) => {
-        console.log(tokenURI);
+      .on("transactionHash", async (hash) => {
+        const newCollectible = await this.fetchJSONData(this.state.tokenURI);
+        this.setState({
+          collectibles: [newCollectible, ...this.state.collectibles],
+          currentCollectible: newCollectible,
+          loading: false,
+        });
       });
-    const collectible = await this.fetchJSONData(tokenURI);
-    this.setState({
-      collectibles: [...this.state.collectibles, collectible],
-      loading: false,
-    });
   };
 
   //Change Video
-  changeVideo = (hash, title) => {};
+  changeToken = (collectible) => {
+    this.setState({ currentCollectible: collectible });
+  };
 
   constructor(props) {
     super(props);
@@ -164,9 +172,11 @@ class App extends Component {
       account: "",
       celebCollectible: null,
       collectibles: [],
+      description: "",
+      currentCollectible: null,
+      currentOwner: "",
       loading: true,
       name: "",
-      description: "",
     };
 
     //Bind functions
@@ -184,7 +194,10 @@ class App extends Component {
           <Main
             captureFile={this.captureFile}
             setNameAndDesc={this.setNameAndDesc}
+            changeToken={this.changeToken}
             collectibles={this.state.collectibles}
+            currentCollectible={this.state.currentCollectible}
+            currentOwner={this.state.currentOwner}
           />
         )}
       </div>
