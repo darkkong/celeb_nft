@@ -1,0 +1,1 @@
+{"version":3,"sources":["App.css"],"names":[],"mappings":"AAEA,OACE,YAAa,CACb,WAAY,CACZ,oBACF","file":"main.9f2aa95c.chunk.css","sourcesContent":["/* Styles go here */\r\n\r\n.token {\r\n  height: 15rem;\r\n  width: 15rem;\r\n  display: inline-block;\r\n}\r\n"]}
