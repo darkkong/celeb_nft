@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "./static/css/main.9f2aa95c.chunk.css",
-    "main.js": "./static/js/main.eb02b861.chunk.js",
-    "main.js.map": "./static/js/main.eb02b861.chunk.js.map",
-    "runtime-main.js": "./static/js/runtime-main.7c4597cd.js",
-    "runtime-main.js.map": "./static/js/runtime-main.7c4597cd.js.map",
-    "static/css/2.80dce9aa.chunk.css": "./static/css/2.80dce9aa.chunk.css",
-    "static/js/2.c439dabd.chunk.js": "./static/js/2.c439dabd.chunk.js",
-    "static/js/2.c439dabd.chunk.js.map": "./static/js/2.c439dabd.chunk.js.map",
-    "index.html": "./index.html",
-    "precache-manifest.b58460415ab1a27ee883e202d05311a0.js": "./precache-manifest.b58460415ab1a27ee883e202d05311a0.js",
-    "service-worker.js": "./service-worker.js",
-    "static/css/2.80dce9aa.chunk.css.map": "./static/css/2.80dce9aa.chunk.css.map",
-    "static/css/main.9f2aa95c.chunk.css.map": "./static/css/main.9f2aa95c.chunk.css.map",
-    "static/js/2.c439dabd.chunk.js.LICENSE.txt": "./static/js/2.c439dabd.chunk.js.LICENSE.txt",
-    "static/media/celebrity.png": "./static/media/celebrity.54232a20.png",
-    "static/media/music-note.png": "./static/media/music-note.d3c7f314.png"
+    "main.css": "/celeb_nft/static/css/main.9f2aa95c.chunk.css",
+    "main.js": "/celeb_nft/static/js/main.416dd02c.chunk.js",
+    "main.js.map": "/celeb_nft/static/js/main.416dd02c.chunk.js.map",
+    "runtime-main.js": "/celeb_nft/static/js/runtime-main.79338f24.js",
+    "runtime-main.js.map": "/celeb_nft/static/js/runtime-main.79338f24.js.map",
+    "static/css/2.80dce9aa.chunk.css": "/celeb_nft/static/css/2.80dce9aa.chunk.css",
+    "static/js/2.6edaa598.chunk.js": "/celeb_nft/static/js/2.6edaa598.chunk.js",
+    "static/js/2.6edaa598.chunk.js.map": "/celeb_nft/static/js/2.6edaa598.chunk.js.map",
+    "index.html": "/celeb_nft/index.html",
+    "precache-manifest.c4e2513a201ec6c54212da0e70f3df6d.js": "/celeb_nft/precache-manifest.c4e2513a201ec6c54212da0e70f3df6d.js",
+    "service-worker.js": "/celeb_nft/service-worker.js",
+    "static/css/2.80dce9aa.chunk.css.map": "/celeb_nft/static/css/2.80dce9aa.chunk.css.map",
+    "static/css/main.9f2aa95c.chunk.css.map": "/celeb_nft/static/css/main.9f2aa95c.chunk.css.map",
+    "static/js/2.6edaa598.chunk.js.LICENSE.txt": "/celeb_nft/static/js/2.6edaa598.chunk.js.LICENSE.txt",
+    "static/media/celebrity.png": "/celeb_nft/static/media/celebrity.54232a20.png",
+    "static/media/music-note.png": "/celeb_nft/static/media/music-note.d3c7f314.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.7c4597cd.js",
+    "static/js/runtime-main.79338f24.js",
     "static/css/2.80dce9aa.chunk.css",
-    "static/js/2.c439dabd.chunk.js",
+    "static/js/2.6edaa598.chunk.js",
     "static/css/main.9f2aa95c.chunk.css",
-    "static/js/main.eb02b861.chunk.js"
+    "static/js/main.416dd02c.chunk.js"
   ]
 }
