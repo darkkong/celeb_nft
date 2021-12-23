@@ -19,8 +19,11 @@ class Main extends Component {
             >
               <iframe
                 className="embed-responsive-item"
-                src={this.props.currentCollectible.image_url}
-                c
+                src={
+                  this.props.currentCollectible
+                    ? this.props.currentCollectible.image_url
+                    : "about:blank"
+                }
                 allowFullScreen
               ></iframe>
               {/* {(() => {
@@ -70,13 +73,21 @@ class Main extends Component {
             style={{ maxHeight: "768px", minWidth: "175px" }}
           >
             <h3>
-              <b>{this.props.currentCollectible.name}</b>
+              <b>
+                {this.props.currentCollectible
+                  ? this.props.currentCollectible.name
+                  : ""}
+              </b>
             </h3>
             <br />
             <h6>Owned by {this.props.currentOwner}</h6>
             <br />
             <br />
-            <p>{this.props.currentCollectible.description}</p>
+            <p>
+              {this.props.currentCollectible
+                ? this.props.currentCollectible.description
+                : ""}
+            </p>
           </div>
           <div className="col-md-2"></div>
           <div

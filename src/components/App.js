@@ -155,6 +155,7 @@ class App extends Component {
         const newCollectible = await this.fetchJSONData(this.state.tokenURI);
         this.setState({
           collectibles: [newCollectible, ...this.state.collectibles],
+          currentOwner: this.state.account,
           currentCollectible: newCollectible,
           loading: false,
         });
